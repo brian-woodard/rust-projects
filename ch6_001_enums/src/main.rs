@@ -5,19 +5,23 @@ enum IpAddr {
     V6(String),
 }
 
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter,
+#[derive(Debug)]
+enum UsState {
+    Florida,
 }
 
-fn coin_in_cents(coin: Coin) -> u8 {
+enum Coin {
+    Nickel,
+    Quarter(UsState),
+}
+
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
-        Coin::Penny => 1,
         Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter => 25,
+        Coin::Quarter(state) => {
+            println!("State: {:?}", state);
+            25
+        },
     }
 }
 
@@ -31,5 +35,21 @@ fn main() {
     println!("loopback: {:?}", loopback);
 
     let c = Coin::Nickel;
-    println!("coin in cents: {}", coin_in_cents(c));
+    println!("coin in cents: {}", value_in_cents(c));
+
+    let q = Coin::Quarter(UsState::Florida);
+    println!("coin in cents: {}", value_in_cents(q));
+
+    let five = Some(5);
+    let six = plus_one(five);
+    let none = plus_one(None);
+
+    println!("Six {:?} none {:?}", six, none);
+}
+
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None,
+        Some(x) => Some(x + 1),
+    }
 }
